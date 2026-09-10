@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Wall — a treasury that hoards NVDA</title>
+<meta name="description" content="The Wall ($WALL) is Radian's flagship product: a token priced in NVDA shares whose every trade fee buys it back and locks it. Phase 2 adds an NVDA-hoarding treasury and a floor-price buy wall." />
+<link rel="icon" href="wall.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0b1020; --panel: #121a2e; --panel-2: #172038; --border: #22304f; --border-soft: #1a2540;
+    --fg: #e8edf7; --dim: #9aa8c7; --faint: #6b7794;
+    --green: #34d399; --green-2: #22c58a; --blue: #6f9bff; --red: #fb7185;
+    --display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --body: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; margin: 0; }
+  h2 { font-size: 30px; }
+  p { margin: 0; }
+  .dim { color: var(--dim); }
+  .mono { font-family: var(--mono); }
+
+  /* nav */
+  .nav { position: sticky; top: 0; z-index: 20; background: rgba(11,16,32,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-soft); }
+  .nav .wrap { display: flex; align-items: center; gap: 22px; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 18px; color: var(--fg); }
+  .brand img { width: 28px; height: 28px; border-radius: 7px; }
+  .nav-links { display: flex; gap: 22px; margin-left: auto; font-size: 14px; color: var(--dim); font-weight: 500; }
+  .nav-links a { color: var(--dim); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; font-weight: 600; font-family: var(--display); font-size: 15px; border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
+  .btn-primary { background: var(--green); color: #05130d; }
+  .btn-primary:hover { background: var(--green-2); text-decoration: none; }
+  .btn-ghost { background: var(--panel); border-color: var(--border); color: var(--fg); }
+  .btn-ghost:hover { border-color: var(--dim); text-decoration: none; }
+  .btn-sm { padding: 8px 13px; font-size: 13.5px; border-radius: 10px; }
+
+  /* banner */
+  .banner { background: rgba(111,155,255,0.08); border-bottom: 1px solid rgba(111,155,255,0.22); color: var(--dim); font-size: 13px; text-align: center; padding: 8px 16px; }
+  .banner strong { color: var(--blue); }
+
+  /* hero */
+  .hero { position: relative; padding: 84px 0 56px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0.18;
+    background:
+      linear-gradient(180deg, transparent 0%, var(--bg) 92%),
+      repeating-linear-gradient(0deg, transparent 0 46px, var(--bg) 46px 54px),
+      repeating-linear-gradient(90deg, transparent 0 100px, var(--bg) 100px 108px),
+      linear-gradient(180deg, #34d399 0%, #0f5c40 100%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), transparent 85%);
+  }
+  .hero .wrap { position: relative; z-index: 1; }
+  .kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); }
+  .kicker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(52,211,153,0.18); }
+  .hero h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1.02; margin-top: 18px; max-width: 820px; }
+  .hero h1 em { font-style: normal; color: var(--green); }
+  .hero .sub { font-size: 19px; color: var(--dim); max-width: 640px; margin-top: 22px; }
+  .hero .cta { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 44px; }
+  .stat { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--border-soft); border-radius: 16px; padding: 18px 20px; }
+  .stat .l { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--dim); }
+  .stat .v { font-family: var(--display); font-weight: 700; font-size: 26px; margin-top: 6px; }
+  .stat .s { font-size: 12.5px; color: var(--faint); margin-top: 4px; }
+  .stat .v.green { color: var(--green); }
+  .prog { height: 8px; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border-soft); overflow: hidden; margin-top: 10px; }
+  .prog > i { display: block; height: 100%; width: 0%; background: linear-gradient(90deg, var(--green-2), var(--green)); transition: width 0.6s ease; }
+
+  /* sections */
+  section { padding: 64px 0; border-top: 1px solid var(--border-soft); }
+  .sec-head { margin-bottom: 26px; }
+  .sec-head p { color: var(--dim); margin-top: 8px; max-width: 640px; font-size: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: 18px; padding: 24px; }
+  .card .n { font-family: var(--display); font-weight: 700; font-size: 13px; color: var(--green); letter-spacing: 0.06em; }
+  .card h3 { font-size: 19px; margin-top: 8px; }
+  .card p { color: var(--dim); margin-top: 10px; font-size: 14.5px; }
+  .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  .pill.live { background: rgba(52,211,153,0.12); color: var(--green); border: 1px solid rgba(52,211,153,0.3); }
+  .pill.next { background: rgba(111,155,255,0.12); color: var(--blue); border: 1px solid rgba(111,155,255,0.3); }
+
+  /* live panel */
+  .live { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; }
+  .trades { display: flex; flex-direction: column; gap: 8px; }
+  .trade { display: grid; grid-template-columns: 62px 1fr auto auto; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--border-soft); border-radius: 12px; background: var(--panel-2); font-size: 13.5px; }
+  .trade .side { font-weight: 700; font-family: var(--display); }
+  .trade .side.buy { color: var(--green); } .trade .side.sell { color: var(--red); }
+  .trade .who { color: var(--dim); }
+  .trade .when { color: var(--faint); font-size: 12.5px; }
+  .kv { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-soft); font-size: 14px; }
+  .kv:last-child { border-bottom: none; }
+  .kv .k { color: var(--dim); } .kv .v { font-weight: 600; text-align: right; }
+
+  /* flow */
+  .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; }
+  .flow .arrow { color: var(--green); font-size: 24px; text-align: center; }
+
+  /* roadmap */
+  .road { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .step { background: var(--panel); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative; }
+  .step .t { font-size: 12px; color: var(--faint); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .step h3 { font-size: 16.5px; margin-top: 8px; }
+  .step p { color: var(--dim); font-size: 13.5px; margin-top: 8px; }
+  .step.done { border-color: rgba(52,211,153,0.35); }
+
+  /* chains */
+  .chains { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .chain { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid var(--border-soft); border-radius: 18px; padding: 26px; }
+  .chain h3 { font-size: 22px; }
+  .chain .role { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); font-weight: 700; }
+  .chain p { color: var(--dim); margin-top: 10px; font-size: 14.5px; }
+
+  /* table */
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  td .mono { font-size: 12.5px; }
+  .tablewrap { overflow-x: auto; }
+
+  .footer { padding: 36px 0 56px; border-top: 1px solid var(--border-soft); color: var(--faint); font-size: 13px; }
+  .footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .stats, .road { grid-template-columns: repeat(2, 1fr); }
+    .grid3, .live, .chains { grid-template-columns: 1fr; }
+    .flow { grid-template-columns: 1fr; } .flow .arrow { transform: rotate(90deg); }
+    section { padding: 48px 0; }
+    .hero { padding: 56px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="banner"><strong>Arc Testnet</strong> — NVDAx is a clearly-labeled stand-in for NVDA. Nothing here is real money. Arc mainnet opens Sept 16.</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="wall.png" alt="" /> The Wall</a>
+    <nav class="nav-links">
+      <a href="#live">Live</a><a href="#now">Built now</a><a href="#treasury">Treasury</a><a href="#roadmap">Roadmap</a><a href="#chains">Chains</a><a href="#verify">Verify</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" id="tradeTop" href="#" target="_blank" rel="noreferrer">Trade on Radian ↗</a>
+  </div>
+</header>
+
+<section class="hero" style="border-top:none">
+  <div class="wrap">
+    <span class="kicker"><span class="dot"></span> Flagship product on Radian · priced in NVDA shares</span>
+    <h1>A treasury that hoards NVDA.<br /><em>And only buys.</em></h1>
+    <p class="sub">$WALL isn't priced in dollars. It's priced in <strong>shares of Nvidia</strong>. Every trade fee buys $WALL back and locks it for five years — the wall is already being built. Phase 2 turns the treasury into a floor under the price, paid for in NVDA.</p>
+    <div class="cta">
+      <a class="btn btn-primary" id="tradeHero" href="#" target="_blank" rel="noreferrer">Trade $WALL on Radian ↗</a>
+      <a class="btn btn-ghost" href="#treasury">How the wall works</a>
+    </div>
+
+    <div class="stats" id="live">
+      <div class="stat">
+        <div class="l">Price per $WALL</div>
+        <div class="v green" id="spotNvda">—</div>
+        <div class="s" id="spotUsd">NVDA shares · USD reference loading…</div>
+      </div>
+      <div class="stat">
+        <div class="l">NVDA in the curve</div>
+        <div class="v" id="nvdaIn">—</div>
+        <div class="s" id="gradLine">of the graduation goal</div>
+        <div class="prog"><i id="progBar"></i></div>
+      </div>
+      <div class="stat">
+        <div class="l">Fully-diluted value</div>
+        <div class="v" id="fdvNvda">—</div>
+        <div class="s" id="fdvUsd">1,000,000,000 supply · in NVDA shares</div>
+      </div>
+      <div class="stat">
+        <div class="l">NVDA reference</div>
+        <div class="v" id="nvdaPx">—</div>
+        <div class="s" id="nvdaSrc">delayed · off-chain reference only</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="now">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="pill live">Live on-chain now</span>
+      <h2 style="margin-top:12px">The wall is already being built</h2>
+      <p>Phase 1 ships with <strong>zero new contracts</strong>. $WALL runs on Radian's verified launchpad in <strong>Buyback &amp; Lock</strong> mode — a mechanic that exists today, not a promise.</p>
+    </div>
+    <div class="live">
+      <div class="card">
+        <div class="flow">
+          <div><div class="n">1 · TRADE</div><h3>Someone buys or sells</h3><p>Every trade on the curve (and later the locked Uniswap V4 pool) pays a 1% fee — in NVDA.</p></div>
+          <div class="arrow">→</div>
+          <div><div class="n">2 · BUY BACK</div><h3>Fee buys $WALL</h3><p>The buyback share of that fee automatically buys $WALL back from the market.</p></div>
+          <div class="arrow">→</div>
+          <div><div class="n">3 · LOCK</div><h3>Locked five years</h3><p>Bought-back $WALL goes into the platform vault and can't be sold. Supply in circulation only shrinks.</p></div>
+        </div>
+        <div style="margin-top:22px">
+          <div class="kv"><span class="k">$WALL locked in vault</span><span class="v" id="lockedWall">—</span></div>
+          <div class="kv"><span class="k">Trades so far</span><span class="v" id="tradeCount">—</span></div>
+          <div class="kv"><span class="k">Launched</span><span class="v" id="createdAt">—</span></div>
+          <div class="kv"><span class="k">Graduation</span><span class="v">At 50 NVDA in the curve → liquidity locked forever in a Uniswap V4 pool</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="n">RECENT TRADES</div>
+        <div class="trades" id="trades" style="margin-top:12px"><div class="dim">Loading…</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="treasury">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="pill next">Phase 2 · in design</span>
+      <h2 style="margin-top:12px">Then the treasury becomes a wall</h2>
+      <p>Phase 2 adds contracts that turn fee flow into a <strong>growing pile of NVDA</strong> and a <strong>floor under the price</strong>. Built from the same buyback-and-burn flywheel Radian already runs for its own token — proven on-chain, adapted here.</p>
+    </div>
+    <div class="grid3">
+      <div class="card">
+        <div class="n">HOARD</div>
+        <h3>The treasury accumulates NVDA</h3>
+        <p>Creator-fee flow is redirected from a wallet to a treasury contract. It holds NVDA shares and never sells them. Treasury per token is the <em>book value</em> of $WALL — public, on-chain, every block.</p>
+      </div>
+      <div class="card">
+        <div class="n">DEFEND</div>
+        <h3>A buy wall at the floor</h3>
+        <p>When the market price drops toward book value, the treasury spends NVDA to buy $WALL back. That's the wall: a bid that's always there, funded by shares, not by hope.</p>
+      </div>
+      <div class="card">
+        <div class="n">COMPOUND</div>
+        <h3>Buy back, burn, reward</h3>
+        <p>Bought-back tokens are burned (book value per token rises) or streamed to stakers as NVDA-denominated yield. Less supply, more shares per token, every cycle.</p>
+      </div>
+    </div>
+    <p class="dim" style="margin-top:18px;font-size:13.5px">Full mechanism, parameters, and open questions live in <a href="https://github.com/adrianhihi/radian" target="_blank" rel="noreferrer">the product repo's TREASURY.md</a>. It ships only after Arc mainnet, an audit of the new contracts, and a real tokenized stock to back it.</p>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head"><h2>Roadmap</h2><p>Story first, heavy contracts when the conditions line up. Nothing here needs a rewrite.</p></div>
+    <div class="road">
+      <div class="step done"><div class="t">Now · Arc testnet</div><h3>Phase 1 live</h3><p>$WALL launched on Radian, priced in NVDAx, Buyback &amp; Lock on. This site reads it live.</p></div>
+      <div class="step"><div class="t">Sept 16 · Arc mainnet</div><h3>Real dollars</h3><p>Radian deploys against Arc's canonical Uniswap V4. $WALL relaunches with real USDC-backed trading.</p></div>
+      <div class="step"><div class="t">Phase 2</div><h3>Treasury + buy wall</h3><p>Treasury contracts, floor-price buyback, burn/stake split. Audited before it holds a cent.</p></div>
+      <div class="step"><div class="t">Real stock</div><h3>Backed by real NVDA</h3><p>Deployed where tokenized stocks actually live (BSC via Ondo), so the treasury holds the real thing.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="chains">
+  <div class="wrap">
+    <div class="sec-head"><h2>Born on Arc. Backed by real stocks on BSC.</h2><p>Radian isn't pinned to one chain — but it isn't spread thin either. Hub and spoke: one home, one place where the stocks are.</p></div>
+    <div class="chains">
+      <div class="chain"><div class="role">Home</div><h3>Arc</h3><p>Circle's chain, where USDC is the native gas coin. Radian's brand, its $RADIAN token and fee flywheel, and every dollar-priced launch live here. This is where $WALL is born.</p></div>
+      <div class="chain"><div class="role">Real-stock spoke</div><h3>BSC</h3><p>Where tokenized stocks actually trade today (Ondo's ~260 instruments, canonical Uniswap V4). When The Wall's treasury needs to hold <em>real</em> NVDA, it deploys here. Fees flow home over Circle's CCTP.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="verify">
+  <div class="wrap">
+    <div class="sec-head"><h2>Verify everything</h2><p>Every address below is public on Arc testnet. The launchpad contracts are a byte-for-byte port of Pons V2 (Sourcify-verified). Verification proves source = bytecode; it is not an audit.</p></div>
+    <div class="tablewrap"><table>
+      <tr><th>Thing</th><th>Address</th><th>What it is</th></tr>
+      <tr><td>$WALL token</td><td><a class="mono" id="aTok" target="_blank" rel="noreferrer"></a></td><td>ERC-20, 1B fixed supply, minted by the launchpad</td></tr>
+      <tr><td>Bonding curve</td><td><a class="mono" id="aCurve" target="_blank" rel="noreferrer"></a></td><td>Where $WALL trades before graduation. Holds the NVDA.</td></tr>
+      <tr><td>NVDAx (stand-in)</td><td><a class="mono" id="aNvda" target="_blank" rel="noreferrer"></a></td><td>Testnet placeholder for NVDA. Replaced by a real tokenized stock on mainnet.</td></tr>
+      <tr><td>Buyback vault</td><td><a class="mono" id="aVault" target="_blank" rel="noreferrer"></a></td><td>Where bought-back $WALL is locked for 5 years</td></tr>
+      <tr><td>Launch factory</td><td><a class="mono" id="aFactory" target="_blank" rel="noreferrer"></a></td><td>Radian's launchpad (Pons V2 port)</td></tr>
+      <tr><td>Launch tx</td><td><a class="mono" id="aLaunchTx" target="_blank" rel="noreferrer"></a></td><td>The transaction that created $WALL</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="row">
+      <div>The Wall is a product built on <a href="https://radian-sable.vercel.app" target="_blank" rel="noreferrer">Radian</a>, the launchpad for Circle's Arc.</div>
+      <div><a href="https://github.com/adrianhihi/radian" target="_blank" rel="noreferrer">GitHub</a> · <span id="lastUpd">—</span></div>
+    </div>
+    <p style="margin-top:14px;max-width:820px">Not investment advice. $WALL is an experimental token on a test network. Reference prices are delayed, off-chain, and never read by any contract. Tokenized stocks carry their own legal and jurisdictional constraints — do your own research.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  // ── Wiring ──────────────────────────────────────────────────────────────
+  const TOKEN   = "0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D";
+  const CURVE   = "0xc21599A27b1210E0E8b96335cc34800657e89Db9";
+  const NVDAX   = "0xDebcC47bf6e1DEFE1eC76290441836E4981dA882";
+  const VAULT   = "0xe84D81C3d4f3E12123C9F934AB3Cb8238772b39e";
+  const FACTORY = "0x90022cC2107De9c070F889E3A67009FcA270E4E2";
+  const LAUNCH_TX = "0x3cf2e930f88574980c0f1974a2f6d00774ac4099d2fba111dd7fa2962f6a0d3b";
+  const EXPLORER = "https://testnet.arcscan.app";
+  const PLATFORM = "https://radian-sable.vercel.app";
+  const INDEXER  = "https://radian-indexer-production.up.railway.app";
+  const RPC      = "https://rpc.testnet.arc.io";
+  const SUPPLY   = 1e9;
+
+  const $ = (id) => document.getElementById(id);
+  const short = (a) => a.slice(0, 8) + "…" + a.slice(-6);
+  const link = (id, href, text) => { const el = $(id); el.href = href; el.textContent = text; };
+  link("aTok", `${EXPLORER}/address/${TOKEN}`, short(TOKEN));
+  link("aCurve", `${EXPLORER}/address/${CURVE}`, short(CURVE));
+  link("aNvda", `${EXPLORER}/address/${NVDAX}`, short(NVDAX));
+  link("aVault", `${EXPLORER}/address/${VAULT}`, short(VAULT));
+  link("aFactory", `${EXPLORER}/address/${FACTORY}`, short(FACTORY));
+  link("aLaunchTx", `${EXPLORER}/tx/${LAUNCH_TX}`, short(LAUNCH_TX));
+  $("tradeTop").href = $("tradeHero").href = `${PLATFORM}/token/${TOKEN}`;
+
+  // ── Formatting ──────────────────────────────────────────────────────────
+  const fromWei = (x) => Number(x) / 1e18;
+  const fmt = (n, d = 2) => n.toLocaleString("en-US", { maximumFractionDigits: d });
+  const fmtUsd = (n) => n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: n < 1 ? 6 : 2 });
+  // The indexer reports timestamps in ms; accept seconds too so this never shows a year like 58661.
+  const toSec = (t) => (t > 1e12 ? Math.floor(t / 1000) : t);
+  const ago = (ts) => { const s = Math.max(1, Math.floor(Date.now() / 1000 - toSec(ts))); if (s < 60) return `${s}s ago`; if (s < 3600) return `${Math.floor(s/60)}m ago`; if (s < 86400) return `${Math.floor(s/3600)}h ago`; return `${Math.floor(s/86400)}d ago`; };
+
+  // ── Data sources ────────────────────────────────────────────────────────
+  // Curve reserves straight from the chain (getReserves() selector 0x0902f1ac).
+  async function reserves() {
+    const r = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: CURVE, data: "0x0902f1ac" }, "latest"] }) });
+    const hex = (await r.json()).result;
+    return { q: BigInt("0x" + hex.slice(2, 66)), t: BigInt("0x" + hex.slice(66, 130)) };
+  }
+  const indexer = () => fetch(`${INDEXER}/token/${TOKEN}`, { cache: "no-store" }).then((r) => r.json());
+  const nvdaRef = () => fetch(`${PLATFORM}/api/stock-price?symbol=NVDA`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+
+  // ── Render ──────────────────────────────────────────────────────────────
+  async function load() {
+    const [res, idx, ref] = await Promise.allSettled([reserves(), indexer(), nvdaRef()]);
+    const px = ref.status === "fulfilled" && ref.value && typeof ref.value.price === "number" ? ref.value.price : null;
+
+    if (px != null) {
+      $("nvdaPx").textContent = fmtUsd(px);
+      const pc = ref.value.prevClose; const chg = pc ? ((px - pc) / pc) * 100 : null;
+      $("nvdaSrc").textContent = (chg != null ? `${chg >= 0 ? "▲" : "▼"} ${Math.abs(chg).toFixed(2)}% · ` : "") + `${ref.value.source || "delayed"} · off-chain reference only`;
+    } else { $("nvdaPx").textContent = "—"; $("nvdaSrc").textContent = "reference unavailable"; }
+
+    if (res.status === "fulfilled") {
+      const { q, t } = res.value;
+      const spot = fromWei(q) / fromWei(t); // NVDA per WALL
+      $("spotNvda").textContent = spot.toExponential(3) + " NVDA";
+      $("spotUsd").textContent = px != null ? `≈ ${fmtUsd(spot * px)} per $WALL (reference)` : "NVDA shares";
+      const fdv = spot * SUPPLY;
+      $("fdvNvda").textContent = fmt(fdv, 1) + " NVDA";
+      $("fdvUsd").textContent = px != null ? `≈ ${fmtUsd(fdv * px)} · 1B supply · reference` : "1,000,000,000 supply · in NVDA shares";
+    }
+
+    if (idx.status === "fulfilled" && idx.value && idx.value.token) {
+      const tk = idx.value.token;
+      const inCurve = fromWei(tk.trackedQuote || "0");
+      const goal = fromWei(tk.graduationThreshold || "0") || 50;
+      const prog = typeof tk.progress === "number" ? tk.progress : (goal ? inCurve / goal : 0);
+      $("nvdaIn").textContent = fmt(inCurve, 3) + " NVDA";
+      $("gradLine").textContent = `${(prog * 100).toFixed(1)}% of the ${fmt(goal, 0)}-share graduation goal`;
+      $("progBar").style.width = Math.min(100, prog * 100) + "%";
+      const locked = tk.buybackLocked != null ? fromWei(tk.buybackLocked) : null;
+      $("lockedWall").textContent = locked != null ? fmt(locked, 0) + " $WALL" : "—";
+      if (tk.createdAt) $("createdAt").textContent = new Date(toSec(tk.createdAt) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      const trades = (idx.value.trades || []).slice().sort((a, b) => b.ts - a.ts);
+      $("tradeCount").textContent = String(trades.length);
+      const box = $("trades"); box.innerHTML = "";
+      if (!trades.length) box.innerHTML = '<div class="dim">No trades yet.</div>';
+      for (const tr of trades.slice(0, 8)) {
+        const el = document.createElement("a"); el.className = "trade"; el.href = `${EXPLORER}/tx/${tr.txHash}`; el.target = "_blank"; el.rel = "noreferrer";
+        el.innerHTML = `<span class="side ${tr.side}">${tr.side.toUpperCase()}</span><span>${fmt(fromWei(tr.quote), 4)} NVDA <span class="who">· ${fmt(fromWei(tr.tokens), 0)} $WALL</span></span><span class="who mono">${tr.trader.slice(0,6)}…${tr.trader.slice(-4)}</span><span class="when">${ago(tr.ts)}</span>`;
+        box.appendChild(el);
+      }
+    }
+    $("lastUpd").textContent = "updated " + new Date().toLocaleTimeString();
+  }
+  load(); setInterval(load, 15000);
+})();
+</script>
+</body>
+</html>

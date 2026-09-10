@@ -1,0 +1,54 @@
+{
+  "product": "The Wall",
+  "symbol": "WALL",
+  "phase": 1,
+  "network": {
+    "name": "Arc Testnet",
+    "chainId": 5042002,
+    "rpc": "https://rpc.testnet.arc.io",
+    "explorer": "https://testnet.arcscan.app",
+    "note": "TESTNET. No real money. Arc mainnet opens 2026-09-16."
+  },
+  "addresses": {
+    "token": "0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D",
+    "curve": "0xc21599A27b1210E0E8b96335cc34800657e89Db9",
+    "quoteToken": "0xDebcC47bf6e1DEFE1eC76290441836E4981dA882",
+    "quoteTokenNote": "NVDAx — clearly-labeled testnet stand-in for NVDA (MockStock, 18 decimals). Replaced by a real tokenized stock on a real-stock deployment.",
+    "deployer": "0x13E6b6C635CAcD4B27C9309251A4D083457eb11C",
+    "platform": {
+      "factory": "0x90022cC2107De9c070F889E3A67009FcA270E4E2",
+      "buybackVault": "0xe84D81C3d4f3E12123C9F934AB3Cb8238772b39e",
+      "feeEscrow": "0x6133392C976d5160CBDE63815f7cd63122f3841C",
+      "locker": "0x7efb5B773BBbf69Bd163b52b1BA88C529a0f123c",
+      "hook": "0x15eB3aeE2f96A199165dc58e6C8dc3Ce2e02e044",
+      "poolManager": "0x24219d0F3611fE4E438850bB7DB165439957dc9f"
+    }
+  },
+  "transactions": {
+    "launch": "0x3cf2e930f88574980c0f1974a2f6d00774ac4099d2fba111dd7fa2962f6a0d3b",
+    "approveQuote": "0x885b7dbadf5d2352a581032929de4f6bec9854f5cc960242dd5b7840f38b0a9a",
+    "openingBuy": "0x159d121a0cc9d29fc945b64ce2ba6aeca5761a3dcf70d1280e7ffe5cde5fffe6"
+  },
+  "launchParams": {
+    "launchConfigId": 0,
+    "supply": "1000000000000000000000000000",
+    "curveFeeBps": 100,
+    "feeMode": "buyback-and-lock",
+    "buybackEnabled": true,
+    "creatorTaxBps": 0,
+    "creatorFeeRecipient": "0x13E6b6C635CAcD4B27C9309251A4D083457eb11C",
+    "creatorFeeRecipientNote": "placeholder — Phase 2 points this at WallTreasury",
+    "quoteEconomics": { "phantomQuote": "20000000000000000000", "graduationThreshold": "50000000000000000000", "decimals": 18, "unit": "NVDA shares" },
+    "openingBuy": "10000000000000000000",
+    "salt": "0x0a11",
+    "logo": "https://radian-indexer-production.up.railway.app/img/cbdfd68c67f6d583ef712d1c.png"
+  },
+  "sources": {
+    "launchScript": "https://github.com/adrianhihi/radian/blob/main/script/LaunchWall.s.sol",
+    "quoteTokenContract": "https://github.com/adrianhihi/radian/blob/main/src/mock/MockStock.sol",
+    "platformContracts": "https://github.com/adrianhihi/radian/tree/main/src/v2",
+    "platformTokenPage": "https://radian-sable.vercel.app/token/0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D",
+    "indexer": "https://radian-indexer-production.up.railway.app/token/0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D"
+  },
+  "verification": "Platform contracts are a byte-for-byte port of Pons V2 (Sourcify-verified). Verification proves source = bytecode; it is not an audit."
+}
