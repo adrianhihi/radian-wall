@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>The Wall — a treasury that hoards NVDA</title>
-<meta name="description" content="The Wall ($WALL) is Radian's flagship product: a token priced in NVDA shares whose every trade fee buys it back and locks it. Phase 2 adds an NVDA-hoarding treasury and a floor-price buy wall." />
+<title>The Wall ($WALL)</title>
+<meta name="description" content="The Wall ($WALL) is Radian's flagship product on Arc testnet: a token priced in NVDA shares (NVDAx stand-in). Phase 1 is live on the launchpad in Buyback & Lock mode; Phase 2 — a treasury that hoards NVDA and defends a floor price — is in design." />
 <link rel="icon" href="wall.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -156,9 +156,9 @@
 
 <section class="hero" style="border-top:none">
   <div class="wrap">
-    <span class="kicker"><span class="dot"></span> Flagship product on Radian · priced in NVDA shares</span>
-    <h1>A treasury that hoards NVDA.<br /><em>And only buys.</em></h1>
-    <p class="sub">$WALL isn't priced in dollars. It's priced in <strong>shares of Nvidia</strong>. Every trade fee buys $WALL back and locks it for five years — the wall is already being built. Phase 2 turns the treasury into a floor under the price, paid for in NVDA.</p>
+    <span class="kicker"><span class="dot"></span> Flagship product on Radian · Phase 1 live on Arc testnet</span>
+    <h1>The Wall.<br /><em>Priced in NVDA shares.</em></h1>
+    <p class="sub">$WALL isn't priced in dollars. It trades on Radian's bonding curve against <strong>NVDAx</strong> — a testnet stand-in for Nvidia stock. It launched in <strong>Buyback &amp; Lock</strong> mode: the buyback share of every trade fee buys $WALL back into a five-year vesting vault. <strong>Phase 2</strong> — a treasury that hoards NVDA and defends a floor under the price — is designed, not built. Every claim on this page is labeled live or planned.</p>
     <div class="cta">
       <a class="btn btn-primary" id="tradeHero" href="#" target="_blank" rel="noreferrer">Trade $WALL on Radian ↗</a>
       <a class="btn btn-ghost" href="#treasury">How the wall works</a>
@@ -194,20 +194,20 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="pill live">Live on-chain now</span>
-      <h2 style="margin-top:12px">The wall is already being built</h2>
-      <p>Phase 1 ships with <strong>zero new contracts</strong>. $WALL runs on Radian's verified launchpad in <strong>Buyback &amp; Lock</strong> mode — a mechanic that exists today, not a promise.</p>
+      <h2 style="margin-top:12px">What is live today</h2>
+      <p>Phase 1 ships with <strong>zero new contracts</strong>. $WALL runs on Radian's launchpad (a source-identical port of Pons V2) in <strong>Buyback &amp; Lock</strong> mode. Here is exactly what that mechanic does — no more, no less.</p>
     </div>
     <div class="live">
       <div class="card">
         <div class="flow">
-          <div><div class="n">1 · TRADE</div><h3>Someone buys or sells</h3><p>Every trade on the curve (and later the locked Uniswap V4 pool) pays a 1% fee — in NVDA.</p></div>
+          <div><div class="n">1 · TRADE</div><h3>Someone buys or sells</h3><p>Every trade on the curve (and later the locked Uniswap V4 pool) pays a 1% fee in the quote asset, NVDAx.</p></div>
           <div class="arrow">→</div>
-          <div><div class="n">2 · BUY BACK</div><h3>Fee buys $WALL</h3><p>The buyback share of that fee automatically buys $WALL back from the market.</p></div>
+          <div><div class="n">2 · BUY BACK</div><h3>Part of the fee buys $WALL</h3><p>35% of that fee (the buyback share) accumulates on the curve; when the platform's sweep operator runs a sweep, it buys $WALL back from the market. It is not automatic per trade.</p></div>
           <div class="arrow">→</div>
-          <div><div class="n">3 · LOCK</div><h3>Locked five years</h3><p>Bought-back $WALL goes into the platform vault and can't be sold. Supply in circulation only shrinks.</p></div>
+          <div><div class="n">3 · VEST</div><h3>Vested over five years</h3><p>Bought-back $WALL goes into the platform vault and is released linearly over 5 years — 70% to the creator, 30% to the protocol. It is a vest, not a burn and not a permanent lock.</p></div>
         </div>
         <div style="margin-top:22px">
-          <div class="kv"><span class="k">$WALL locked in vault</span><span class="v" id="lockedWall">—</span></div>
+          <div class="kv"><span class="k">$WALL vesting in vault</span><span class="v" id="lockedWall">—</span></div>
           <div class="kv"><span class="k">Trades so far</span><span class="v" id="tradeCount">—</span></div>
           <div class="kv"><span class="k">Launched</span><span class="v" id="createdAt">—</span></div>
           <div class="kv"><span class="k">Graduation</span><span class="v">At 50 NVDA in the curve → liquidity locked forever in a Uniswap V4 pool</span></div>
@@ -245,7 +245,7 @@
         <p>Bought-back tokens are burned (book value per token rises) or streamed to stakers as NVDA-denominated yield. Less supply, more shares per token, every cycle.</p>
       </div>
     </div>
-    <p class="dim" style="margin-top:18px;font-size:13.5px">Full mechanism, parameters, and open questions live in <a href="https://github.com/adrianhihi/radian" target="_blank" rel="noreferrer">the product repo's TREASURY.md</a>. It ships only after Arc mainnet, an audit of the new contracts, and a real tokenized stock to back it.</p>
+    <p class="dim" style="margin-top:18px;font-size:13.5px">Full mechanism, parameters, and open questions live in <a href="https://github.com/adrianhihi/radian-wall/blob/main/docs/TREASURY.md" target="_blank" rel="noreferrer">the product repo's TREASURY.md</a>. None of it is deployed. It ships only after Arc mainnet, an audit of the new contracts, and a real tokenized stock to back it.</p>
   </div>
 </section>
 
@@ -254,7 +254,7 @@
     <div class="sec-head"><h2>Roadmap</h2><p>Story first, heavy contracts when the conditions line up. Nothing here needs a rewrite.</p></div>
     <div class="road">
       <div class="step done"><div class="t">Now · Arc testnet</div><h3>Phase 1 live</h3><p>$WALL launched on Radian, priced in NVDAx, Buyback &amp; Lock on. This site reads it live.</p></div>
-      <div class="step"><div class="t">Sept 16 · Arc mainnet</div><h3>Real dollars</h3><p>Radian deploys against Arc's canonical Uniswap V4. $WALL relaunches with real USDC-backed trading.</p></div>
+      <div class="step"><div class="t">Sept 16 · Arc mainnet</div><h3>Real money</h3><p>Radian deploys against Arc's canonical Uniswap V4 and $WALL relaunches on mainnet. Its quote asset there depends on whether a real tokenized stock exists on Arc by then — otherwise USDC, with the stock version living on the BSC spoke.</p></div>
       <div class="step"><div class="t">Phase 2</div><h3>Treasury + buy wall</h3><p>Treasury contracts, floor-price buyback, burn/stake split. Audited before it holds a cent.</p></div>
       <div class="step"><div class="t">Real stock</div><h3>Backed by real NVDA</h3><p>Deployed where tokenized stocks actually live (BSC via Ondo), so the treasury holds the real thing.</p></div>
     </div>
@@ -266,19 +266,19 @@
     <div class="sec-head"><h2>Born on Arc. Backed by real stocks on BSC.</h2><p>Radian isn't pinned to one chain — but it isn't spread thin either. Hub and spoke: one home, one place where the stocks are.</p></div>
     <div class="chains">
       <div class="chain"><div class="role">Home</div><h3>Arc</h3><p>Circle's chain, where USDC is the native gas coin. Radian's brand, its $RADIAN token and fee flywheel, and every dollar-priced launch live here. This is where $WALL is born.</p></div>
-      <div class="chain"><div class="role">Real-stock spoke</div><h3>BSC</h3><p>Where tokenized stocks actually trade today (Ondo's ~260 instruments, canonical Uniswap V4). When The Wall's treasury needs to hold <em>real</em> NVDA, it deploys here. Fees flow home over Circle's CCTP.</p></div>
+      <div class="chain"><div class="role">Real-stock spoke</div><h3>BSC</h3><p>Where tokenized stocks actually trade today (Ondo's ~260 instruments, canonical Uniswap V4). When The Wall's treasury needs to hold <em>real</em> NVDA, it deploys here. BSC has no native USDC (Circle's CCTP there carries USYC only), so fees come home through a third-party bridge or USYC — an open item, not a solved one.</p></div>
     </div>
   </div>
 </section>
 
 <section id="verify">
   <div class="wrap">
-    <div class="sec-head"><h2>Verify everything</h2><p>Every address below is public on Arc testnet. The launchpad contracts are a byte-for-byte port of Pons V2 (Sourcify-verified). Verification proves source = bytecode; it is not an audit.</p></div>
+    <div class="sec-head"><h2>Verify everything</h2><p>Every address below is public on Arc testnet. The launchpad contracts are a source-identical port of Pons V2 — the upstream is Sourcify-verified on Robinhood Chain; on Arc testnet only the factory is verified on Arcscan so far. Verification proves source = bytecode; it is not an audit.</p></div>
     <div class="tablewrap"><table>
       <tr><th>Thing</th><th>Address</th><th>What it is</th></tr>
       <tr><td>$WALL token</td><td><a class="mono" id="aTok" target="_blank" rel="noreferrer"></a></td><td>ERC-20, 1B fixed supply, minted by the launchpad</td></tr>
       <tr><td>Bonding curve</td><td><a class="mono" id="aCurve" target="_blank" rel="noreferrer"></a></td><td>Where $WALL trades before graduation. Holds the NVDA.</td></tr>
-      <tr><td>NVDAx (stand-in)</td><td><a class="mono" id="aNvda" target="_blank" rel="noreferrer"></a></td><td>Testnet placeholder for NVDA. Replaced by a real tokenized stock on mainnet.</td></tr>
+      <tr><td>NVDAx (stand-in)</td><td><a class="mono" id="aNvda" target="_blank" rel="noreferrer"></a></td><td>Testnet placeholder for NVDA: a plain ERC-20 whose deployer can mint without limit. Not an asset. Replaced by a real tokenized stock on a real-stock deployment.</td></tr>
       <tr><td>Buyback vault</td><td><a class="mono" id="aVault" target="_blank" rel="noreferrer"></a></td><td>Where bought-back $WALL is locked for 5 years</td></tr>
       <tr><td>Launch factory</td><td><a class="mono" id="aFactory" target="_blank" rel="noreferrer"></a></td><td>Radian's launchpad (Pons V2 port)</td></tr>
       <tr><td>Launch tx</td><td><a class="mono" id="aLaunchTx" target="_blank" rel="noreferrer"></a></td><td>The transaction that created $WALL</td></tr>
@@ -343,6 +343,15 @@
 
   // ── Render ──────────────────────────────────────────────────────────────
   async function load() {
+    try {
+      await loadInner();
+    } catch (e) {
+      // A malformed response must not kill the poll loop.
+      console.warn("render failed", e);
+    }
+    $("lastUpd").textContent = "updated " + new Date().toLocaleTimeString();
+  }
+  async function loadInner() {
     const [res, idx, ref] = await Promise.allSettled([reserves(), indexer(), nvdaRef()]);
     const px = ref.status === "fulfilled" && ref.value && typeof ref.value.price === "number" ? ref.value.price : null;
 
@@ -373,17 +382,32 @@
       const locked = tk.buybackLocked != null ? fromWei(tk.buybackLocked) : null;
       $("lockedWall").textContent = locked != null ? fmt(locked, 0) + " $WALL" : "—";
       if (tk.createdAt) $("createdAt").textContent = new Date(toSec(tk.createdAt) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-      const trades = (idx.value.trades || []).slice().sort((a, b) => b.ts - a.ts);
+      // Indexer rows are untrusted input: validate every field and build the
+      // DOM with textContent only — never innerHTML.
+      const isHex = (s, len) => typeof s === "string" && new RegExp(`^0x[0-9a-fA-F]{${len}}$`).test(s);
+      const trades = (Array.isArray(idx.value.trades) ? idx.value.trades : [])
+        .filter((t) => t && (t.side === "buy" || t.side === "sell") && isHex(t.txHash, 64) && isHex(t.trader, 40) && Number.isFinite(Number(t.ts)))
+        .sort((a, b) => b.ts - a.ts);
       $("tradeCount").textContent = String(trades.length);
-      const box = $("trades"); box.innerHTML = "";
-      if (!trades.length) box.innerHTML = '<div class="dim">No trades yet.</div>';
+      const box = $("trades");
+      box.replaceChildren();
+      if (!trades.length) {
+        const d = document.createElement("div"); d.className = "dim"; d.textContent = "No trades yet."; box.appendChild(d);
+      }
+      const span = (cls, text) => { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = text; return s; };
       for (const tr of trades.slice(0, 8)) {
         const el = document.createElement("a"); el.className = "trade"; el.href = `${EXPLORER}/tx/${tr.txHash}`; el.target = "_blank"; el.rel = "noreferrer";
-        el.innerHTML = `<span class="side ${tr.side}">${tr.side.toUpperCase()}</span><span>${fmt(fromWei(tr.quote), 4)} NVDA <span class="who">· ${fmt(fromWei(tr.tokens), 0)} $WALL</span></span><span class="who mono">${tr.trader.slice(0,6)}…${tr.trader.slice(-4)}</span><span class="when">${ago(tr.ts)}</span>`;
+        el.appendChild(span(`side ${tr.side}`, tr.side.toUpperCase()));
+        const amt = span("", `${fmt(fromWei(tr.quote), 4)} NVDA `); amt.appendChild(span("who", `· ${fmt(fromWei(tr.tokens), 0)} $WALL`)); el.appendChild(amt);
+        el.appendChild(span("who mono", `${tr.trader.slice(0, 6)}…${tr.trader.slice(-4)}`));
+        el.appendChild(span("when", ago(tr.ts)));
         box.appendChild(el);
       }
+    } else {
+      // Indexer down or malformed: say so instead of showing "Loading…" forever.
+      const box = $("trades");
+      if (!box.querySelector(".trade")) { box.replaceChildren(); const d = document.createElement("div"); d.className = "dim"; d.textContent = "Live trade feed unavailable right now."; box.appendChild(d); }
     }
-    $("lastUpd").textContent = "updated " + new Date().toLocaleTimeString();
   }
   load(); setInterval(load, 15000);
 })();

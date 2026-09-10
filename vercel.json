@@ -6,6 +6,18 @@
   "outputDirectory": "site",
   "cleanUrls": true,
   "headers": [
-    { "source": "/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=60, s-maxage=300" }] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=60, s-maxage=300" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://rpc.testnet.arc.io https://radian-indexer-production.up.railway.app https://radian-sable.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+        }
+      ]
+    }
   ]
 }
