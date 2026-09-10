@@ -50,5 +50,12 @@
     "platformTokenPage": "https://radian-sable.vercel.app/token/0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D",
     "indexer": "https://radian-indexer-production.up.railway.app/token/0xf8Ab1B64598d7d422baBa415b10eC34ca6f0096D"
   },
-  "verification": "Platform contracts are a byte-for-byte port of Pons V2 (Sourcify-verified). Verification proves source = bytecode; it is not an audit."
+  "verification": "Platform contracts are a source-identical port of Pons V2 (upstream Sourcify-verified on Robinhood Chain; on Arc testnet only the factory is verified on Arcscan so far). Verification proves source = bytecode; it is not an audit.",
+  "phase1Mechanics": {
+    "feeBps": 100,
+    "buybackShareOfFee": "35% (fee minus the 30% protocol share, times the 50% buyback split)",
+    "buybackTrigger": "sweepFees() by the platform fee-sweep operator or the curve deployer — not automatic per trade",
+    "vault": "PonsV2BuybackVault: 5-year LINEAR VEST released 70% to the creator / 30% to the protocol — a vest, not a burn or permanent lock",
+    "onChainDescriptionNote": "The description stored on the first $WALL token said 'locks it for 5 years'; that wording is wrong (it is a vest) and cannot be edited on-chain. This token is being relaunched with a corrected description; see the manifest history."
+  }
 }
