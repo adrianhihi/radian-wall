@@ -1,6 +1,6 @@
 # Phase 2 — The treasury and the buy wall
 
-**Status: design. Nothing below is deployed.** Phase 1 (live) uses only the platform's Buyback & Lock mode. This document specifies what Phase 2 adds, what it reuses from the platform, and what is still open. It ships only after Arc mainnet, an audit of these contracts, and a real tokenized stock to hold.
+**Status: the curve-phase mechanics below (fee inflow, book value, taker `defend`, staking) are deployed as the platform's Stock Treasury template (`src/radian/wall/` in the Radian repo, Arc testnet, 2026-09-14). The post-graduation ladder is still design.** Phase 1 (live) uses only the platform's Buyback & Lock mode. This document specifies what Phase 2 adds, what it reuses from the platform, and what is still open. It ships only after Arc mainnet, an audit of these contracts, and a real tokenized stock to hold.
 
 ## Goal
 

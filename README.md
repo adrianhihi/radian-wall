@@ -61,3 +61,17 @@ site/            brand site (static)
 docs/TREASURY.md Phase 2 mechanism spec + open questions
 manifest.json    every address, tx hash, and parameter of the live deployment
 ```
+
+## Update 2026-09-14: The Wall is now a launch template
+
+The platform ships the Wall mechanics as a template anyone can launch with one transaction
+(`RadianLaunchRouter.launchWall`): a per-launch `WallTreasury` (creator fees → a quote pile that
+is never sold; a slice of every claim streams to stakers; the rest keeps a standing bid under
+book value on the curve) and a `WallStaking` pool paying in the quote asset. Contracts, tests
+and the keeper live in the Radian repo (`src/radian/wall/`, `test/WallTemplate.t.sol`,
+`indexer/src/keeper.ts`). A showcase instance quoted in NVDAx (testnet stand-in) is live:
+token `0xD2aBFD74c4F64B1041A3b33b7e702760aEFEA943`, treasury
+`0xEB608F66a7B80794989E3fe26FF2d03471D41f13`. $WALL v2 itself still runs in the platform's
+Buyback & Lock mode; moving it onto the template is a relaunch decision for after Arc mainnet.
+The post-graduation maker ladder (docs/TREASURY.md, 2026-09-13 revision) is not built yet;
+`defend` reverts once a curve graduates.
