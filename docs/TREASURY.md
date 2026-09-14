@@ -6,6 +6,54 @@
 
 Turn $WALL's fee flow into (1) a growing, never-sold pile of NVDA and (2) a bid that is always under the price. The system is **oracle-free**: "book value" is computed from token balances, and the floor is defended by buying on the curve/pool at market — the trading price is the only price.
 
+## Revision 2026-09-13: hybrid wall (taker before graduation, maker after)
+
+Studying BTC Stock Protocol's *DefenseNet* (the sibling stock-treasury design on Robinhood
+Chain) changed one thing in this spec: **after graduation the wall is a maker-side ladder, not a
+taker-side buyback.** A market buy fills into the treasury's own wick and can be sandwiched; a
+ladder of single-sided quote-token ranges below the price is filled *by* sellers, at prices the
+treasury chose. Before graduation there is no order book (the bonding curve only takes market
+orders), so `defend()` as specified in §3 stays the pre-graduation mechanism.
+
+| | Before graduation (curve) | After graduation (V4 pool) |
+| --- | --- | --- |
+| Mechanism | `defend()` market-buys on the curve when `spot < bookValue × (1 + margin)` | seven single-sided NVDA ranges below an anchor, at −5 / −10 / −15 / −20 / −30 / −40 / −50% |
+| Who executes | keeper (anyone), bounded by `epochBudget` | keeper `poke()` re-anchors, migrates surviving rungs, funds new ones; `harvest()` pulls fully crossed rungs |
+| Price reference | book value (oracle-free) | anchor = high-water ratchet of the pool tick: `max(sealedTick, twapTick)`, moves only toward higher value, at most ×1.25 per beat, never follows a dump |
+| Deepest rung | n/a | never above book value: the −50% rung sits at `min(anchor − 50%, bookValue)`, so the ladder always ends at or below the fundamental floor |
+| Sizing | `min(epochBudget, amountToRestoreFloor)` | coverage κ = deepest-layer NVDA × 2 × anchorPrice ÷ circulating; κ < 1 → 100% to the deep layer, else 40% shallow / 60% mid; deep layer clamped to [40%, 80%] of funds |
+| On fill | bought $WALL split burn / stream (§4) | $WALL recovered from a crossed rung is 100% burned on `harvest()`; freed NVDA re-stands in the unfilled part of the rung or returns to the pending pot |
+| Bounty | `keeperBountyBps` of the buy | fixed unit bounty paid **last** in `poke()`, from an escrow capped at 30× the bounty and fed by ≤ 2% of fee inflow; sized to Arc gas with margin (BSP's covered 28% of gas and its keepers stalled) |
+
+Rules carried over from DefenseNet, adopted as written:
+
+- **First-wall gate.** The first `poke()` reverts unless the anchor is ready and spot is still
+  above the −5% rung, and it must fund a non-zero position or the whole call reverts. No bounty
+  for an empty wall.
+- **Conservation.** `totalFeesIn == unfilled + converted + pending + keeperEscrow + keeperPaid +
+  streamed` is an on-chain view; the site shows it and the ledger page reconciles against it.
+- **Never a taker after graduation.** The treasury never initiates a swap in the pool; it only
+  adds and removes liquidity.
+- **Generations.** A full crossing of the deepest rung ends the generation: re-anchor at the
+  sealed spot, new positions under a new salt. Two consecutive all-empty underwater beats
+  trigger the same re-base (stall escape).
+
+What we deliberately do differently:
+
+- **Book value floors the ladder.** BSP has no fundamental anchor. Ours is on-chain
+  (`treasuryNVDA ÷ circulating`) and caps how deep the wall can sit.
+- **No emission.** BSP funds its wall from the fee of a trade-to-mine token. Ours is funded by
+  the creator-fee share of an ordinary Radian launch (§1), so the wall never depends on a
+  halving schedule.
+- **Keeper bounty sized to gas**, re-settable by the owner within bounds, not immutable.
+- **Maintenance must not depend on discarded accounting.** BSP's audit found that a public
+  `donate()` could block `poke()` by polluting a ledger that ignored `feesAccrued`. Our
+  conservation check keeps pool-side fee accruals in their own bucket.
+
+Open, to argue over: rung widths on Arc's V4 tick spacing; whether a low-float token needs the
+mid layer at all; whether `harvest()` streams part of the recovered NVDA to stakers or burns
+everything it recovers.
+
 ## Actors
 
 | Actor | Role |
@@ -28,7 +76,7 @@ bookValue   = treasuryNVDA / circulating          // NVDA per $WALL
 ```
 Both inputs are on-chain balances. Published as a view; the site shows it next to the market price.
 
-### 3. Floor defense — the wall
+### 3. Floor defense before graduation (taker; see the 2026-09-13 revision for the post-graduation ladder)
 `defend()` is callable by anyone when
 ```
 marketPrice < bookValue × (1 + margin)
