@@ -1,6 +1,6 @@
 # Phase 2 — The treasury and the buy wall
 
-**Status: the curve-phase mechanics below (fee inflow, book value, taker `defend`, staking) are deployed as the platform's Stock Treasury template (`src/radian/wall/` in the Radian repo, Arc testnet, 2026-09-14). The post-graduation ladder is still design.** Phase 1 (live) uses only the platform's Buyback & Lock mode. This document specifies what Phase 2 adds, what it reuses from the platform, and what is still open. It ships only after Arc mainnet, an audit of these contracts, and a real tokenized stock to hold.
+**Status: the curve-phase mechanics (fee inflow, book value, taker `defend`, staking) AND the post-graduation ladder are deployed as the platform's Stock Treasury template (`src/radian/wall/WallTreasury.sol`, `WallLadder.sol` in the Radian repo; Arc + Robinhood testnets, router v3, 2026-09-16). Showcase with a live ladder: STSHOW2 on Arc testnet.** Phase 1 (live) uses only the platform's Buyback & Lock mode. This document specifies what Phase 2 adds, what it reuses from the platform, and what is still open. It ships only after Arc mainnet, an audit of these contracts, and a real tokenized stock to hold.
 
 ## Goal
 
@@ -53,6 +53,33 @@ What we deliberately do differently:
 Open, to argue over: rung widths on Arc's V4 tick spacing; whether a low-float token needs the
 mid layer at all; whether `harvest()` streams part of the recovered NVDA to stakers or burns
 everything it recovers.
+
+## Implementation notes (2026-09-16): what the shipped ladder does vs. this spec
+
+`WallLadder` follows the hybrid design above with these concrete choices:
+
+- **Rungs**: seven single-sided quote positions, each one tick-spacing wide (2% at spacing 200),
+  placed just below the nominal −5/10/15/20/30/40/50% offsets from the anchor (offsets in ticks:
+  513 / 1054 / 1625 / 2231 / 3567 / 5108 / 6931). A rung whose band the spot currently sits in
+  is not re-posted until the band is clear.
+- **Anchor**: a high-water mark in "value ticks" (independent of currency ordering). First beat
+  anchors at the spot; later beats move it only toward higher value, at most ×1.25 per beat;
+  a dump never lowers it. There is no TWAP oracle in V4, so the slew cap plus the beat interval
+  (≥ 1 h, router default = the treasury's interval) is the wash-pump defence. Hard cap: the
+  anchor never exceeds 2× book value, i.e. the −50% rung never sits above book value.
+- **Beat** (`poke`, keeper or platform owner): harvest every rung the spot has reached (crossed
+  or partly filled) → burn what it bought, unfilled quote back to pending; ratchet the anchor;
+  if it moved, pull and re-post survivors; post pending by the κ rule (deep rung empty or
+  under-covered → all deep; else 40/60 shallow/middle with the deep rung floored at 40% of the
+  ladder); pay the bounty last, only for a productive beat. A market that fell through the whole
+  ladder with nothing standing starts a new generation at the spot.
+- **Funding**: `WallTreasury.fundLadder()` (keeper) hands the pile over once the curve has
+  graduated; 2% of inflow feeds a keeper escrow capped at 30 bounties. Streams to stakers keep
+  coming from `claimFees` as before.
+- **Ledger**: `totalIn == pending + unfilled + converted + keeperEscrow + keeperPaid`, exposed as
+  `ledgerGap()` (rounding dust only). The ladder never holds the token and never initiates a swap.
+- **Not done**: no stall-escape after N idle beats (only the fall-through re-base); no
+  partial re-post inside a straddled band; no owner knobs on the ladder (config fixed at launch).
 
 ## Actors
 
